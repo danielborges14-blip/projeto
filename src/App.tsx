@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import { ArrowRight, Zap } from 'lucide-react'
 import { useEffect } from 'react'
 
@@ -63,6 +64,7 @@ function App() {
 
   return (
     <main className="relative min-h-screen overflow-x-clip bg-zinc-950 text-white">
+      <Analytics />
       <img src={heroBackground} alt="Filmes e séries" className="background-media is-visible" />
       <div className="background-overlay" />
       <div className="animated-aurora" />
