@@ -1,0 +1,213 @@
+@import 'tailwindcss';
+
+:root {
+  /* prefer a consistent dark color-scheme for form controls and UA widgets */
+}
+
+/* Force dark color scheme so the app always renders in dark mode */
+html {
+  color-scheme: dark;
+  background: #030712;
+  /* Prevent iOS Safari from auto-sizing text (keeps layout stable) */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  /* Responsive root font-size: scales between 14px and 17px based on viewport width */
+  font-size: clamp(14px, 3.6vw, 17px);
+}
+
+:root {
+  font-family: 'Poppins', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  /* Use rem-based minimum width to keep consistent sizing across devices */
+  min-width: 20rem; /* 320px */
+  background: #030712;
+  /* Use the responsive root font-size via rems */
+  font-size: 1rem;
+  /* Respect iOS notch / safe area so top cards are not cut off */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+#root {
+  width: 100%;
+  /* keep fluid but constrain on large viewports for a safe reading width */
+  max-width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 0;
+  text-align: left;
+  min-height: 100vh;
+}
+
+.animated-aurora {
+  position: fixed;
+  /* keep decorations fixed to viewport so they don't create page overflow */
+  inset: -10%  -6%  -6% -6%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(56, 189, 248, 0.3), transparent 35%),
+    radial-gradient(circle at 85% 20%, rgba(37, 99, 235, 0.3), transparent 34%),
+    radial-gradient(circle at 50% 85%, rgba(59, 130, 246, 0.26), transparent 38%);
+  filter: blur(30px);
+  animation: auroraShift 18s ease-in-out infinite alternate;
+}
+
+.background-media {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: blur(0px) saturate(1.12) brightness(0.92);
+  transform: scale(1.02);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 900ms ease, transform 12000ms ease;
+  will-change: opacity, transform;
+}
+
+.background-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(2, 6, 23, 0.50), rgba(2, 6, 23, 0.72)),
+    radial-gradient(circle at 20% 0%, rgba(14, 165, 233, 0.16), transparent 45%);
+}
+
+.glass-panel {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(18px);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 999px;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  line-height: 1.35;
+}
+
+.device-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 999px;
+  padding: 0.45rem 0.75rem; /* ~0.45rem vertical, 0.75rem horizontal */
+  min-height: 2rem;
+  /* allow pills to size to their content but constrain on very wide labels */
+  flex: 0 1 auto;
+  max-width: 14rem;
+  width: auto;
+  /* Allow wrapping so long device names or translations don't overflow on small screens */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* Ensure card-like containers allow text to break and avoid overflow/clipping */
+.rounded-3xl,
+.glass-panel,
+.apple-card {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.reveal-up {
+  /* Start mostly visible (80%) and subtly blurred/shifted so content is readable
+     but still animates to full clarity when it scrolls into view. */
+  opacity: 0.8;
+  transform: translateY(6px) scale(0.998);
+  transition:
+    opacity 420ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    transform 420ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    filter 420ms ease;
+  filter: blur(2px);
+}
+
+.reveal-up.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.background-media.is-visible {
+  opacity: 1;
+  transform: scale(1);
+  animation: bgFloat 18s ease-in-out infinite alternate;
+}
+
+@keyframes bgFloat {
+  from { transform: scale(1.02) translateY(0); }
+  to { transform: scale(1.04) translateY(-1.5%); }
+}
+
+/* make reveal animations a bit snappier and smoother */
+.reveal-up {
+  will-change: opacity, transform, filter;
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes auroraShift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(0, -1.5%, 0) scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-aurora,
+  .reveal-up {
+    animation: none !important;
+    transition: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Apple-like card hover: subtle lift, slight scale, soft shadow */
+.apple-card {
+  will-change: transform, box-shadow;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(0) scale(1);
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+}
+.apple-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 24px 48px rgba(2, 6, 23, 0.12);
+}
+.apple-card:active {
+  transform: translateY(-3px) scale(1.01);
+}
